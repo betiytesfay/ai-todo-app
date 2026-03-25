@@ -15,8 +15,8 @@ function TaskList({ tasks, updateTask, deleteTask }) {
           <button
             key={p}
             className={`px-3 py-1 rounded ${filter === p
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             onClick={() => setFilter(p)}
           >
@@ -42,6 +42,11 @@ function TaskList({ tasks, updateTask, deleteTask }) {
             <p className={`text-gray-600 ${task.done ? 'line-through' : ''}`}>
               {task.description}
             </p>
+            {task.dueDate && (
+              <p className={`text-sm ${task.done ? 'line-through' : new Date(task.dueDate) < new Date() ? 'text-red-500' : 'text-gray-500'}`}>
+                Due: {new Date(task.dueDate).toLocaleDateString()}
+              </p>
+            )}
             <span
               className={
                 task.priority === 'High'
@@ -66,8 +71,9 @@ function TaskList({ tasks, updateTask, deleteTask }) {
               onClick={() => {
                 const newTitle = prompt('Edit title', task.title);
                 const newDesc = prompt('Edit description', task.description);
+                const newDueDate = prompt('Edit due date (YYYY-MM-DD)', task.dueDate || '');
                 if (newTitle !== null) {
-                  updateTask({ ...task, title: newTitle, description: newDesc });
+                  updateTask({ ...task, title: newTitle, description: newDesc, dueDate: newDueDate || null });
                 }
               }}
             />
